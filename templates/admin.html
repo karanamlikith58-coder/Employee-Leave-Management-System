@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Admin Dashboard</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1 class="text-center mb-4">👨‍💼 Admin Dashboard</h1>
+
+    <div class="cards">
+
+        <div class="card">
+            <h2>{{ total }}</h2>
+            <p>Total Requests</p>
+        </div>
+
+        <div class="card">
+            <h2>{{ pending }}</h2>
+            <p>Pending</p>
+        </div>
+
+        <div class="card">
+            <h2>{{ approved }}</h2>
+            <p>Approved</p>
+        </div>
+
+        <div class="card">
+            <h2>{{ rejected }}</h2>
+            <p>Rejected</p>
+        </div>
+
+    </div>
+
+    <br>
+<form method="GET" class="row g-3 mb-4">
+
+    <div class="col-md-5">
+        <input
+            type="text"
+            name="search"
+            class="form-control"
+            placeholder="Search Employee"
+            value="{{ search }}">
+    </div>
+
+    <div class="col-md-4">
+        <select name="status" class="form-select">
+
+            <option value="All"
+                {% if status=="All" %}selected{% endif %}>
+                All
+            </option>
+
+            <option value="Pending"
+                {% if status=="Pending" %}selected{% endif %}>
+                Pending
+            </option>
+
+            <option value="Approved"
+                {% if status=="Approved" %}selected{% endif %}>
+                Approved
+            </option>
+
+            <option value="Rejected"
+                {% if status=="Rejected" %}selected{% endif %}>
+                Rejected
+            </option>
+
+        </select>
+    </div>
+
+    <div class="col-md-3">
+        <button class="btn btn-primary w-100">
+            Search
+        </button>
+    </div>
+
+</form>
+    <table class="table table-bordered table-hover align-middle">
+
+        <thead class="table-primary">
+
+        <tr>
+            <th>Employee</th>
+            <th>Leave Type</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Reason</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+
+        </thead>
+
+        <tbody>
+
+        {% for leave in leaves %}
+
+        <tr>
+
+            <td>{{ leave[1] }}</td>
+            <td>{{ leave[2] }}</td>
+            <td>{{ leave[3] }}</td>
+            <td>{{ leave[4] }}</td>
+            <td>{{ leave[5] }}</td>
+
+            <td>
+
+                {% if leave[6] == "Approved" %}
+
+                    <span class="badge bg-success">Approved</span>
+
+                {% elif leave[6] == "Rejected" %}
+
+                    <span class="badge bg-danger">Rejected</span>
+
+                {% else %}
+
+                    <span class="badge bg-warning text-dark">Pending</span>
+
+                {% endif %}
+
+            </td>
+
+            <td>
+
+                <a href="/approve/{{ leave[0] }}" class="btn btn-success btn-sm">
+                    Approve
+                </a>
+
+                <a href="/reject/{{ leave[0] }}" class="btn btn-danger btn-sm">
+                    Reject
+                </a>
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+    <div class="text-center mt-4">
+
+        <a href="/admin_logout" class="btn btn-secondary">
+            Logout
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
